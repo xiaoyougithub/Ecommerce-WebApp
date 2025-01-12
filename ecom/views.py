@@ -1,11 +1,28 @@
 from django.shortcuts import render,redirect,reverse
-from . import forms,models
-from django.http import HttpResponseRedirect,HttpResponse
+from . import forms, models
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+
+
+def product_list(request):
+    products = models.Product.objects.all()
+    product_data = []
+    for product in products:
+        product_data.append({
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'description': product.description
+        })
+    return JsonResponse(product_data, safe=False
+)
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib import messages
 from django.conf import settings
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
 
 def home_view(request):
     products=models.Product.objects.all()
@@ -63,7 +80,7 @@ def afterlogin_view(request):
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def admin_dashboard_view(request):
     # for cards on dashboard
     customercount=models.Customer.objects.all().count()
@@ -90,13 +107,13 @@ def admin_dashboard_view(request):
 
 
 # admin view customer table
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def view_customer_view(request):
     customers=models.Customer.objects.all()
     return render(request,'ecom/view_customer.html',{'customers':customers})
 
 # admin delete customer
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def delete_customer_view(request,pk):
     customer=models.Customer.objects.get(id=pk)
     user=models.User.objects.get(id=customer.user_id)
@@ -105,7 +122,7 @@ def delete_customer_view(request,pk):
     return redirect('view-customer')
 
 
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def update_customer_view(request,pk):
     customer=models.Customer.objects.get(id=pk)
     user=models.User.objects.get(id=customer.user_id)
@@ -124,14 +141,14 @@ def update_customer_view(request,pk):
     return render(request,'ecom/admin_update_customer.html',context=mydict)
 
 # admin view the product
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def admin_products_view(request):
     products=models.Product.objects.all()
     return render(request,'ecom/admin_products.html',{'products':products})
 
 
 # admin add product by clicking on floating button
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def admin_add_product_view(request):
     productForm=forms.ProductForm()
     if request.method=='POST':
@@ -142,14 +159,14 @@ def admin_add_product_view(request):
     return render(request,'ecom/admin_add_products.html',{'productForm':productForm})
 
 
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def delete_product_view(request,pk):
     product=models.Product.objects.get(id=pk)
     product.delete()
     return redirect('admin-products')
 
 
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def update_product_view(request,pk):
     product=models.Product.objects.get(id=pk)
     productForm=forms.ProductForm(instance=product)
@@ -161,7 +178,7 @@ def update_product_view(request,pk):
     return render(request,'ecom/admin_update_product.html',{'productForm':productForm})
 
 
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def admin_view_booking_view(request):
     orders=models.Orders.objects.all()
     ordered_products=[]
@@ -174,14 +191,14 @@ def admin_view_booking_view(request):
     return render(request,'ecom/admin_view_booking.html',{'data':zip(ordered_products,ordered_bys,orders)})
 
 
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def delete_order_view(request,pk):
     order=models.Orders.objects.get(id=pk)
     order.delete()
     return redirect('admin-view-booking')
 
 # for changing status of order (pending,delivered...)
-@login_required(login_url='adminlogin')
+#@login_required(login_url='adminlogin')
 def update_order_view(request,pk):
     order=models.Orders.objects.get(id=pk)
     orderForm=forms.OrderForm(instance=order)

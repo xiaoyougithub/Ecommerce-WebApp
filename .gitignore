@@ -1,0 +1,76 @@
+# .gitignore
+
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Django specific files
+*.log
+*.sqlite3
+db.sqlite3
+
+# Static files
+static/
+
+# Media files
+media/
+
+# Clacky-related configurations
+.1024*
+!.1024
+.breakpoints
+
+# Environments
+.env
+.env.local
+.env.*.local
+
+# Other files to ignore
+*.DS_Store
+*.egg-info/
+*.egg
+*.coverage
+*.cache
+*.pdb
+*.pot
+*.pyc
+*.pyd
+*.whl
+/.mypy_cache/
+*.coverage
+/.idea/
+/.vscode/
+*.sublime-project
+*.sublime-workspace
+*.jscpd.json
+*.jsbeautifyrc
+*.prettierrc
+*.sublime-settings
+*.settings
+*.pylintrc
+*.tox/
+*.pytest_cache/
+*.h5
+*.hdf5
+
+# Pytest
+.cache/
+pytest-debug.log
+*.cover
+.coverage.*
+coverage.xml
+nosetests.xml
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# Ignore static files
+/snap/*
+/media/*
+/static/*
+
+
+# Command to run when "Run" button clicked
+run_command: python manage.py migrate && python manage.py runserver
